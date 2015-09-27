@@ -1,15 +1,31 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This set of functions is used to assing a set of methods (set, get, setsolve, and getsolve) together with an input matrix
+## to an object.
 
-## Write a short comment describing this function
-
+## This functions takes a matrix as an argument and attaches the list of methods, outputting an object
+## that includes the matrix and it's methods.
 makeCacheMatrix <- function(x = matrix()) {
-
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        get <- function() x
+        setsolve <- function(solve) m <<- solve
+        getsolve <- function() m
+        list(set = set, get = get,
+             setsolve = setsolve,
+             getsolve = getsolve)
 }
 
-
-## Write a short comment describing this function
-
+## This function calls the methods in the above function to calculate, save, and return the inverse of the original matrix.
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        m <- x$getsolve()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- solve(data, ...)
+        x$setsolve(m)
+        m
 }
